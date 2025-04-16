@@ -1,6 +1,8 @@
 ## General
 
-For building this app you need to install go 1.21.1 or higher and you should just rung go build command. You will get csm executable file if everything is ok and you can run like ./csm .
+Mysql needs to be installed on local system or wherever the app is running and to everything work out of the box set password for 'root' user for mysql to 'Test123!'.
+
+Depending on OS, inside this repository you can found two binaries. For MAC you use ./csm-mac and for linux ./csm-linux
 
 ## Importing Contacts from CSV into MySQL
 

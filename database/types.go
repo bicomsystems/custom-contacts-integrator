@@ -6,7 +6,6 @@ type Contact struct {
 	LastName  string  `json:"last_name"`
 	Company   string  `json:"company"`
 	Type      string  `json:"type"`
-	FbUserID  string  `json:"fb_user_id"`
 	Phones    []Phone `json:"phones"`
 	Emails    []Email `json:"emails"`
 }

@@ -16,9 +16,12 @@ func InitHttp(db Database) {
 		w.Write([]byte("welcome"))
 	})
 
+	r.Get("/token", handleGenerateJWT)
+
 	r.Route("/contacts", func(r chi.Router) {
-		r.Get("/", h.getContactsHandler) // GET /contacts
-		r.Get("/delta", h.getDeltaContactsHandler)
+		r.Use(authMiddleware)
+		r.Get("/", h.getContactsHandler)           // GET /contacts
+		r.Get("/delta", h.getDeltaContactsHandler) // GET /contacts/delta
 	})
 
 	go http.ListenAndServe(fmt.Sprintf(":%d", config.Conf.HttpServer.Port), r)

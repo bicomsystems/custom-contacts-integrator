@@ -17,7 +17,7 @@ func NewDatabase(database *DBDriver) *Database {
 }
 
 func (database *Database) GetContacts(page, limit int) ([]Contact, bool, error) {
-	query := fmt.Sprintf("SELECT id, name, surname, company, fb_user_id, person_type AS type, config FROM csm.%s LIMIT %d,%d", tablemanager.DB_TABLE_CONTACTS, limit*(page-1), limit+1)
+	query := fmt.Sprintf("SELECT id, name, surname, company, person_type AS type, config FROM csm.%s LIMIT %d,%d", tablemanager.DB_TABLE_CONTACTS, limit*(page-1), limit+1)
 	log.Println(query)
 	rows, err := database.db.Query(query)
 	if err != nil {
@@ -38,7 +38,7 @@ func (database *Database) GetContacts(page, limit int) ([]Contact, bool, error) 
 
 		c := Contact{}
 		var config json.RawMessage
-		if err := rows.Scan(&c.Id, &c.FirstName, &c.LastName, &c.Company, &c.FbUserID, &c.Type, &config); err != nil {
+		if err := rows.Scan(&c.Id, &c.FirstName, &c.LastName, &c.Company, &c.Type, &config); err != nil {
 			log.Printf("Scan failed. Error %v", err)
 			return nil, false, err
 		}
@@ -59,7 +59,7 @@ func (database *Database) GetContacts(page, limit int) ([]Contact, bool, error) 
 }
 
 func (database *Database) GetUpdatedOrDeletedContactsSinceLastSync(page, limit, timestamp int) ([]Contact, []string, bool, error) {
-	query := fmt.Sprintf("SELECT id, name, surname, company, fb_user_id, person_type AS type, config FROM csm.%s WHERE updated_date_time >= %d LIMIT %d,%d", tablemanager.DB_TABLE_CONTACTS, timestamp, limit*(page-1), limit+1)
+	query := fmt.Sprintf("SELECT id, name, surname, company, person_type AS type, config FROM csm.%s WHERE updated_date_time >= %d LIMIT %d,%d", tablemanager.DB_TABLE_CONTACTS, timestamp, limit*(page-1), limit+1)
 	log.Println(query)
 	rows, err := database.db.Query(query)
 	if err != nil {
@@ -81,7 +81,7 @@ func (database *Database) GetUpdatedOrDeletedContactsSinceLastSync(page, limit, 
 
 		c := Contact{}
 		var config json.RawMessage
-		if err := rows.Scan(&c.Id, &c.FirstName, &c.LastName, &c.Company, &c.FbUserID, &c.Type, &config); err != nil {
+		if err := rows.Scan(&c.Id, &c.FirstName, &c.LastName, &c.Company, &c.Type, &config); err != nil {
 			log.Printf("Scan failed. Error %v", err)
 			return nil, nil, false, err
 		}
@@ -108,10 +108,12 @@ func (database *Database) GetUpdatedOrDeletedContactsSinceLastSync(page, limit, 
 	defer records.Close()
 
 	i = 0
+	hasMoreDeleted := false
 	for records.Next() {
 		i++
 		if i > limit {
 			hasMore = true
+			hasMoreDeleted = true
 			break
 		}
 
@@ -121,19 +123,21 @@ func (database *Database) GetUpdatedOrDeletedContactsSinceLastSync(page, limit, 
 			return nil, nil, false, err
 		}
 
-		q = fmt.Sprintf("DELETE FROM csm.%s WHERE contact_id = %s", tablemanager.DB_TABLE_DELETED_CONTACTS, contactID)
-		log.Println(q)
-		_, err = database.db.Exec(q)
-		if err != nil {
-			log.Printf("Delete contact failed. Error %v", err)
-			return nil, nil, false, err
-		}
-
 		deletedContactIDs = append(deletedContactIDs, contactID)
 	}
 
 	if err := records.Err(); err != nil {
 		return nil, nil, false, err
+	}
+
+	if !hasMoreDeleted {
+		q = fmt.Sprintf("DELETE FROM csm.%s", tablemanager.DB_TABLE_DELETED_CONTACTS)
+		log.Println(q)
+		_, err = database.db.Exec(q)
+		if err != nil {
+			log.Printf("Delete contacts failed. Error %v", err)
+			return nil, nil, false, err
+		}
 	}
 
 	return updatedContacts, deletedContactIDs, hasMore, nil

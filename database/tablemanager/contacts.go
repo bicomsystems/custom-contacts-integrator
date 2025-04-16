@@ -22,7 +22,6 @@ func (t *TableContacts) GetCreateTable() string {
 	query.WriteString(" name VARCHAR(255) NOT NULL DEFAULT '',")
 	query.WriteString(" surname VARCHAR(255) NOT NULL DEFAULT '',")
 	query.WriteString(" company VARCHAR(255) NOT NULL DEFAULT '',")
-	query.WriteString(" fb_user_id VARCHAR(255) NOT NULL DEFAULT '',")
 	query.WriteString(" person_type ENUM('customer', 'lead') NOT NULL DEFAULT 'customer',")
 	query.WriteString(" updated_date_time int unsigned,")
 	query.WriteString(" config JSON NOT NULL,")

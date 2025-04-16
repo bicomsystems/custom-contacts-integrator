@@ -8,29 +8,21 @@
 	"item": [
 		{
 			"name": "Get All Contacts",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "X-tenant-code",
-						"value": "",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"limit\": 10\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRfaWQiOiJ0ZXN0X2lkIiwiZXhwIjoxNzQ0NzkxMTgyLCJpYXQiOjE3NDQ3OTEwNjJ9.bZI6NlU326ibtkUJdrQL5kRDttiv4aqtK1iw9X6cCLQ",
+							"type": "string"
 						}
-					}
+					]
 				},
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:5555/contacts?limit=10&page=1",
+					"raw": "http://127.0.0.1:5555/contacts?limit=2&page=1",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -45,7 +37,7 @@
 					"query": [
 						{
 							"key": "limit",
-							"value": "10"
+							"value": "2"
 						},
 						{
 							"key": "page",
@@ -58,27 +50,19 @@
 		},
 		{
 			"name": "Get Delta",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "X-tenant-code",
-						"value": "",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"limit\": 10\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRfaWQiOiJ0ZXN0X2lkIiwiZXhwIjoxNzQ0NzkxMTgyLCJpYXQiOjE3NDQ3OTEwNjJ9.bZI6NlU326ibtkUJdrQL5kRDttiv4aqtK1iw9X6cCLQ",
+							"type": "string"
 						}
-					}
+					]
 				},
+				"method": "GET",
+				"header": [],
 				"url": {
 					"raw": "http://127.0.0.1:5555/contacts/delta?limit=10&page=1&timestamp=55",
 					"protocol": "http",
@@ -106,6 +90,43 @@
 							"key": "timestamp",
 							"value": "55"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test_secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "test_id",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5555/token",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5555",
+					"path": [
+						"token"
 					]
 				}
 			},
