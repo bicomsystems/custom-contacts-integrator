@@ -24,9 +24,7 @@ func (t *TableContacts) GetCreateTable() string {
 	query.WriteString(" company VARCHAR(255) NOT NULL DEFAULT '',")
 	query.WriteString(" person_type ENUM('customer', 'lead') NOT NULL DEFAULT 'customer',")
 	query.WriteString(" updated_date_time int unsigned,")
-	query.WriteString(" config JSON NOT NULL,")
-	query.WriteString(" numbers VARCHAR(1024) GENERATED ALWAYS AS (json_unquote(json_extract(`config`, '$.phones[*].number'))) STORED,")
-	query.WriteString(" emails VARCHAR(1024) GENERATED ALWAYS AS (json_unquote(json_extract(`config`, '$.emails[*].email'))) STORED")
+	query.WriteString(" config JSON NOT NULL")
 	query.WriteString(") ENGINE=InnoDB")
 
 	return query.String()
