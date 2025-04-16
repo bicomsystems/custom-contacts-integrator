@@ -6,7 +6,7 @@ Depending on OS, inside this repository you can found two binaries. For MAC you 
 
 ## Importing Contacts from CSV into MySQL
 
-To insert data into the `contacts` table inside the `csm` database, use the following command:
+Set this variable on server first SET GLOBAL local_infile=ON; To insert data into the `contacts` table inside the `csm` database, use the following command:
 
 ```bash
 
